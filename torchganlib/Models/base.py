@@ -1,7 +1,9 @@
-import abc
 from torchviz import make_dot
+from torch.utils.data import Dataset
 import torch.cuda
 from torchsummary import summary
+from PIL import Image
+from torchvision.transforms import transforms
 
 
 def weights_init_normal(m):
@@ -11,6 +13,25 @@ def weights_init_normal(m):
     elif classname.find("BatchNorm2d") != -1:
         torch.nn.init.normal_(m.weight.data, 1.0, 0.02)
         torch.nn.init.constant_(m.bias.data, 0.0)
+
+
+class DefinedData(Dataset):
+    def __init__(self, x_dir, y_dir, resize=None, type_='img'):
+        super(DefinedData, self).__init__()
+        self.x_dir = x_dir
+        self.label_dir = y_dir
+        self.type_ = type_
+        self.resize = resize
+        self.transformer = transforms.Compose(
+            [
+                lambda x:Image.open(x).convert('RGB'),
+                transforms.RandomHorizontalFlip(0.5),
+                transforms.ToTensor(),
+            ]
+        )
+
+    def __getitem__(self, item):
+        pass
 
 
 class BaseBackend:
@@ -56,13 +77,11 @@ class BaseBackend:
         else:
             raise RuntimeError("Discriminator Network Backend is None!")
 
-    def train(self, x, y,
-              pretrainmodel=None,
-              save_loss=False):
-        pass
+    def train(self, x, y, x_dir, y_dir, pretrainmodel=None, save_loss=False):
+        if pretrainmodel is not None:
+            pass
 
-    def pre_train(self, x, y):
-        pass
+
 
     def evaluate(self):
         pass
