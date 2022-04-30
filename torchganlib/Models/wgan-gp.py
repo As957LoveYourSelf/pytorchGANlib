@@ -30,11 +30,8 @@ class GD(nn.Module):
 
 
 class Model(BaseBackend):
-    def __init__(self, lr=1e-4, batch_size=8, epochs=10):
+    def __init__(self):
         super(Model, self).__init__()
-        self.__lr = lr
-        self.__batch_size = batch_size
-        self.__epochs = epochs
         self._generator = G()
         self._discriminator = D()
         self._deep_network = GD()
