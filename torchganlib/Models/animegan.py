@@ -35,3 +35,6 @@ class Model(BaseBackend):
         self._generator = G()
         self._discriminator = D()
         self._deep_network = GD()
+
+    def train(self):
+        pass
